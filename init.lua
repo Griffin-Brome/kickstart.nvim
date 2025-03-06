@@ -93,6 +93,21 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
+-- Use OSC52 sequence for clipboard integration. This is nice when
+-- paired with mosh & wezterm
+-- See `:help clipboard-osc52
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+    ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste '+',
+    ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+  },
+}
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
