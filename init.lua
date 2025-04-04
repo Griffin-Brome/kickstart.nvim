@@ -736,6 +736,7 @@ require('lazy').setup({
             },
           },
         },
+        typos_lsp = {},
         ruff = {},
       }
 
