@@ -218,6 +218,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Automatically resize buffers when Neovim is resized
+vim.api.nvim_create_autocmd('VimResized', {
+  group = vim.api.nvim_create_augroup('resize-windows', { clear = true }),
+  callback = function()
+    vim.cmd 'wincmd ='
+  end,
+  desc = 'Automatically resize windows when Neovim is resized',
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -244,8 +253,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-surround',
-  'tpope/vim-repeat',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -738,6 +745,7 @@ require('lazy').setup({
         },
         typos_lsp = {},
         ruff = {},
+        terraformls = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -756,6 +764,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'shellcheck',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -891,9 +900,9 @@ require('lazy').setup({
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
-          --['<CR>'] = cmp.mapping.confirm { select = true },
-          --['<Tab>'] = cmp.mapping.select_next_item(),
-          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
+          -- ['<CR>'] = cmp.mapping.confirm { select = true },
+          -- ['<Tab>'] = cmp.mapping.select_next_item(),
+          -- ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
@@ -932,6 +941,7 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = 'nvim_lsp_signature_help' },
+          { name = 'codeium' },
         },
       }
     end,
@@ -1047,7 +1057,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
